@@ -1,6 +1,7 @@
 package com.jpcchaves.waiterapp.domain.dtos;
 
 public class ProductDto {
+    private Long id;
     private Long code;
     private String name;
     private Double price;
@@ -9,11 +10,20 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public ProductDto(Long code, String name, Double price, Integer quantity) {
+    public ProductDto(Long id, Long code, String name, Double price, Integer quantity) {
+        this.id = id;
         this.code = code;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getCode() {
