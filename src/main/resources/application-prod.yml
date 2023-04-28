@@ -3,9 +3,9 @@ spring:
     import: optional:file:.env[.properties]
   datasource:
     url: ${DB_PROD_URL}
-    driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_PROD_ROOT_USERNAME}
     password: ${DB_PROD_ROOT_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,10 +13,3 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         show_sql: true
-app:
-  jwt-secret: ${JWT_PROD_SECRET}
-  jwt-expiration-milliseconds: ${JWT_PROD_EXPIRATION_MILLIS}
-springdoc:
-  swagger-ui:
-    operations-sorter: alpha
-    tags-sorter: alpha
