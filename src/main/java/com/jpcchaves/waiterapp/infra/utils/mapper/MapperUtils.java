@@ -1,4 +1,4 @@
-package com.jpcchaves.waiterapp.utils.mapper;
+package com.jpcchaves.waiterapp.infra.utils.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
