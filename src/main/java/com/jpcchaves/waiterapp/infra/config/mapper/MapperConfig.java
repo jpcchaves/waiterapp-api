@@ -1,4 +1,4 @@
-package com.jpcchaves.waiterapp.config.mapper;
+package com.jpcchaves.waiterapp.infra.config.mapper;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
