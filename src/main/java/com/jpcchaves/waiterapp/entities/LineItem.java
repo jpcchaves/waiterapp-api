@@ -1,7 +1,6 @@
 package com.jpcchaves.waiterapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,6 +16,7 @@ public class LineItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer quantity;
+    private Double subTotal;
 
     @ManyToOne(
             fetch = FetchType.EAGER
@@ -35,15 +35,25 @@ public class LineItem implements Serializable {
             name = "product_id",
             nullable = false
     )
-    @JsonManagedReference
     private Product product;
 
     public LineItem() {
     }
 
-    public LineItem(Long id, Integer quantity, Order order, Product product) {
+    public LineItem(Integer quantity,
+                    Double subTotal,
+                    Order order,
+                    Product product) {
+        this.quantity = quantity;
+        this.subTotal = subTotal;
+        this.order = order;
+        this.product = product;
+    }
+
+    public LineItem(Long id, Integer quantity, Double subTotal, Order order, Product product) {
         this.id = id;
         this.quantity = quantity;
+        this.subTotal = subTotal;
         this.order = order;
         this.product = product;
     }
@@ -78,5 +88,13 @@ public class LineItem implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Double getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
     }
 }
