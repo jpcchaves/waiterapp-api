@@ -1,42 +1,54 @@
 package com.jpcchaves.waiterapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+@EntityListeners(AuditingEntityListener.class)
+public class Order implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -8304692593435400074L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID orderCode;
+
+    @CreatedDate
+    private Date createdAt;
+
+    @OneToMany(
+            mappedBy = "order",
             cascade = CascadeType.DETACH
     )
-    @JoinTable(
-            name = "orders_products",
-            joinColumns = @JoinColumn(
-                    name = "order_id",
-                    referencedColumnName = "orderId"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "product_id",
-                    referencedColumnName = "id"
-            )
-    )
-    private List<Product> products = new ArrayList<>();
+    @JsonManagedReference
+    private List<LineItem> lineItems = new ArrayList<>();
 
     public Order() {
     }
 
-    public Order(Long orderId, List<Product> products) {
+    public Order(Long orderId,
+                 UUID orderCode,
+                 Date createdAt,
+                 List<LineItem> lineItems) {
         this.orderId = orderId;
-        this.products = products;
+        this.orderCode = orderCode;
+        this.createdAt = createdAt;
+        this.lineItems = lineItems;
     }
 
     public Long getOrderId() {
@@ -47,12 +59,28 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public UUID getOrderCode() {
+        return orderCode;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setOrderCode(UUID orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public List<LineItem> getLineItems() {
+        return lineItems;
+    }
+
+    public void setLineItems(List<LineItem> lineItems) {
+        this.lineItems = lineItems;
     }
 }
 

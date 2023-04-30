@@ -3,38 +3,36 @@ package com.jpcchaves.waiterapp.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements Serializable {
+
+    private static final long serialVersionUID = -323000221643539689L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String productName;
+    private String name;
     @Column(nullable = false)
-    private String productDescription;
+    private String description;
     @Column(nullable = false)
     private Double price;
-
-
-    @ManyToMany(
-            mappedBy = "products",
-            fetch = FetchType.LAZY
-    )
-    @JsonIgnore
-    private List<Order> order;
 
     public Product() {
     }
 
-    public Product(Long id, String productName, String productDescription, Double price, List<Order> order) {
+    public Product(Long id,
+                   String name,
+                   String description,
+                   Double price) {
         this.id = id;
-        this.productName = productName;
-        this.productDescription = productDescription;
+        this.name = name;
+        this.description = description;
         this.price = price;
-        this.order = order;
     }
 
     public Long getId() {
@@ -45,20 +43,20 @@ public class Product {
         this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getProductDescription() {
-        return productDescription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setProductDescription(String productDescription) {
-        this.productDescription = productDescription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Double getPrice() {
@@ -67,13 +65,5 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public List<Order> getOrder() {
-        return order;
-    }
-
-    public void setOrder(List<Order> order) {
-        this.order = order;
     }
 }
