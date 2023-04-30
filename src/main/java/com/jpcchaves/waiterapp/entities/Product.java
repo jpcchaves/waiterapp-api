@@ -1,6 +1,9 @@
 package com.jpcchaves.waiterapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -15,14 +18,23 @@ public class Product {
     @Column(nullable = false)
     private Double price;
 
+
+    @ManyToMany(
+            mappedBy = "products",
+            fetch = FetchType.LAZY
+    )
+    @JsonIgnore
+    private List<Order> order;
+
     public Product() {
     }
 
-    public Product(Long id, String productName, String productDescription, Double price) {
+    public Product(Long id, String productName, String productDescription, Double price, List<Order> order) {
         this.id = id;
         this.productName = productName;
         this.productDescription = productDescription;
         this.price = price;
+        this.order = order;
     }
 
     public Long getId() {
@@ -55,5 +67,13 @@ public class Product {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public List<Order> getOrder() {
+        return order;
+    }
+
+    public void setOrder(List<Order> order) {
+        this.order = order;
     }
 }
