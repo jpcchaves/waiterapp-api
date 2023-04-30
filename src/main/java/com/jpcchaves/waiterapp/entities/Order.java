@@ -31,6 +31,8 @@ public class Order implements Serializable {
     @CreatedDate
     private Date createdAt;
 
+    private Double orderTotal;
+
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.DETACH
@@ -43,10 +45,12 @@ public class Order implements Serializable {
 
     public Order(Long orderId,
                  UUID orderCode,
+                 Double orderTotal,
                  Date createdAt,
                  List<LineItem> lineItems) {
         this.orderId = orderId;
         this.orderCode = orderCode;
+        this.orderTotal = orderTotal;
         this.createdAt = createdAt;
         this.lineItems = lineItems;
     }
@@ -65,6 +69,14 @@ public class Order implements Serializable {
 
     public void setOrderCode(UUID orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public Double getOrderTotal() {
+        return orderTotal;
+    }
+
+    public void setOrderTotal(Double orderTotal) {
+        this.orderTotal = orderTotal;
     }
 
     public Date getCreatedAt() {

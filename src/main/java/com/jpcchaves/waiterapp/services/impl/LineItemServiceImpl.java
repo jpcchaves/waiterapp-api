@@ -8,8 +8,10 @@ import com.jpcchaves.waiterapp.repositories.LineItemRepository;
 import com.jpcchaves.waiterapp.repositories.OrderRepository;
 import com.jpcchaves.waiterapp.repositories.ProductRepository;
 import com.jpcchaves.waiterapp.services.LineItemService;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,17 +42,23 @@ public class LineItemServiceImpl implements LineItemService {
             throw new RuntimeException("Product not found for the given id: " + lineItem.getProductId());
         }
 
-        Optional<Order> order = orderRepository.findById(lineItem.getOrderId());
-        Optional<Product> product = productRepository.findById(lineItem.getProductId());
+        Optional<Order> optionalOrder = orderRepository.findById(lineItem.getOrderId());
+        Optional<Product> optionalProduct = productRepository.findById(lineItem.getProductId());
 
         LineItem newItem = new LineItem();
 
-        if (order.isPresent() && product.isPresent()) {
-            newItem.setSubTotal(calculateSubTotal(lineItem.getQuantity(), product.get().getPrice()));
-            newItem.setOrder(order.get());
-            newItem.setProduct(product.get());
+        if (optionalOrder.isPresent() && optionalProduct.isPresent()) {
+            Order order = optionalOrder.get();
+            Product product = optionalProduct.get();
+            newItem.setSubTotal(calculateSubTotal(lineItem.getQuantity(), product.getPrice()));
+            newItem.setOrder(order);
+            newItem.setProduct(product);
             newItem.setQuantity(lineItem.getQuantity());
+
+            Double total = calculateOrderTotal(order.getLineItems());
+            order.setOrderTotal(total);
         }
+
 
         repository.save(newItem);
         return "Item successfully added to the order";
@@ -58,5 +66,14 @@ public class LineItemServiceImpl implements LineItemService {
 
     private Double calculateSubTotal(Integer quantity, Double price) {
         return quantity * price;
+    }
+
+    private Double calculateOrderTotal(List<LineItem> lineItems) {
+        Double total = 0.0;
+        for (LineItem lineItem : lineItems) {
+            total += lineItem.getSubTotal();
+        }
+
+        return total;
     }
 }
