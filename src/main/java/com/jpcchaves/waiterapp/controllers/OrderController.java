@@ -1,6 +1,6 @@
 package com.jpcchaves.waiterapp.controllers;
 
-import com.jpcchaves.waiterapp.entities.Order;
+import com.jpcchaves.waiterapp.payload.dtos.order.OrderResponseDto;
 import com.jpcchaves.waiterapp.services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Order>> getAll() {
+    public ResponseEntity<List<OrderResponseDto>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 }
