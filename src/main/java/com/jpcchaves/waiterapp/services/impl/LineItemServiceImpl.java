@@ -3,6 +3,7 @@ package com.jpcchaves.waiterapp.services.impl;
 import com.jpcchaves.waiterapp.entities.LineItem;
 import com.jpcchaves.waiterapp.entities.Order;
 import com.jpcchaves.waiterapp.entities.Product;
+import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDto;
 import com.jpcchaves.waiterapp.repositories.LineItemRepository;
 import com.jpcchaves.waiterapp.repositories.OrderRepository;
@@ -31,11 +32,11 @@ public class LineItemServiceImpl implements LineItemService {
     public String createLineItem(LineItemDto lineItem) {
         Order order = orderRepository
                 .findById(lineItem.getOrderId())
-                .orElseThrow(() -> new RuntimeException("Order not found for the given id: " + lineItem.getOrderId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found for the given id: " + lineItem.getOrderId()));
 
         Product product = productRepository
                 .findById(lineItem.getProductId())
-                .orElseThrow(() -> new RuntimeException("Order not found for the given id: " + lineItem.getOrderId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found for the given id: " + lineItem.getProductId()));
 
         LineItem newItem = new LineItem();
 
