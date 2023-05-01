@@ -31,19 +31,13 @@ public class LineItemServiceImpl implements LineItemService {
 
     @Override
     public String createLineItem(LineItemDto lineItem) {
-        boolean hasOrder = orderRepository.existsById(lineItem.getOrderId());
-        boolean hasProduct = productRepository.existsById(lineItem.getProductId());
+        Optional<Order> optionalOrder = Optional.ofNullable(orderRepository
+                .findById(lineItem.getOrderId())
+                .orElseThrow(() -> new RuntimeException("Order not found for the given id: " + lineItem.getOrderId())));
 
-        if(!hasOrder){
-            throw new RuntimeException("Order not found for the given id: " + lineItem.getOrderId());
-        };
-
-        if (!hasProduct) {
-            throw new RuntimeException("Product not found for the given id: " + lineItem.getProductId());
-        }
-
-        Optional<Order> optionalOrder = orderRepository.findById(lineItem.getOrderId());
-        Optional<Product> optionalProduct = productRepository.findById(lineItem.getProductId());
+        Optional<Product> optionalProduct = Optional.ofNullable(productRepository
+                .findById(lineItem.getProductId())
+                .orElseThrow(() -> new RuntimeException("Order not found for the given id: " + lineItem.getOrderId())));
 
         LineItem newItem = new LineItem();
 
@@ -58,7 +52,6 @@ public class LineItemServiceImpl implements LineItemService {
             Double total = calculateOrderTotal(order.getLineItems());
             order.setOrderTotal(total);
         }
-
 
         repository.save(newItem);
         return "Item successfully added to the order";
