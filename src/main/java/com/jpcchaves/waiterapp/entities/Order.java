@@ -2,6 +2,7 @@ package com.jpcchaves.waiterapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.jpcchaves.waiterapp.Enum.OrderStatus;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,10 +29,18 @@ public class Order implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID orderCode;
 
+    private String orderDetails;
+
+    private OrderStatus status;
     @CreatedDate
     private Date createdAt;
+    private Date conclusionDate;
 
     private Double orderTotal;
+
+    private Boolean isPaid;
+
+    private Boolean isDone;
 
     @OneToMany(
             mappedBy = "order",
@@ -45,13 +54,23 @@ public class Order implements Serializable {
 
     public Order(Long orderId,
                  UUID orderCode,
-                 Double orderTotal,
+                 String orderDetails,
+                 OrderStatus status,
                  Date createdAt,
+                 Date conclusionDate,
+                 Double orderTotal,
+                 Boolean isPaid,
+                 Boolean isDone,
                  List<LineItem> lineItems) {
         this.orderId = orderId;
         this.orderCode = orderCode;
-        this.orderTotal = orderTotal;
+        this.orderDetails = orderDetails;
+        this.status = status;
         this.createdAt = createdAt;
+        this.conclusionDate = conclusionDate;
+        this.orderTotal = orderTotal;
+        this.isPaid = isPaid;
+        this.isDone = isDone;
         this.lineItems = lineItems;
     }
 
@@ -71,12 +90,20 @@ public class Order implements Serializable {
         this.orderCode = orderCode;
     }
 
-    public Double getOrderTotal() {
-        return orderTotal;
+    public String getOrderDetails() {
+        return orderDetails;
     }
 
-    public void setOrderTotal(Double orderTotal) {
-        this.orderTotal = orderTotal;
+    public void setOrderDetails(String orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public Date getCreatedAt() {
@@ -85,6 +112,38 @@ public class Order implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getConclusionDate() {
+        return conclusionDate;
+    }
+
+    public void setConclusionDate(Date conclusionDate) {
+        this.conclusionDate = conclusionDate;
+    }
+
+    public Double getOrderTotal() {
+        return orderTotal;
+    }
+
+    public void setOrderTotal(Double orderTotal) {
+        this.orderTotal = orderTotal;
+    }
+
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
+    }
+
+    public Boolean getDone() {
+        return isDone;
+    }
+
+    public void setDone(Boolean done) {
+        isDone = done;
     }
 
     public List<LineItem> getLineItems() {
