@@ -1,6 +1,5 @@
 package com.jpcchaves.waiterapp.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jpcchaves.waiterapp.Enum.OrderStatus;
 import jakarta.persistence.*;
@@ -9,9 +8,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -47,7 +46,7 @@ public class Order implements Serializable {
             cascade = CascadeType.DETACH
     )
     @JsonManagedReference
-    private List<LineItem> lineItems = new ArrayList<>();
+    private Set<LineItem> lineItems = new HashSet<>();
 
     public Order() {
     }
@@ -61,7 +60,7 @@ public class Order implements Serializable {
                  Double orderTotal,
                  Boolean isPaid,
                  Boolean isDone,
-                 List<LineItem> lineItems) {
+                 Set<LineItem> lineItems) {
         this.orderId = orderId;
         this.orderCode = orderCode;
         this.orderDetails = orderDetails;
@@ -146,11 +145,11 @@ public class Order implements Serializable {
         isDone = done;
     }
 
-    public List<LineItem> getLineItems() {
+    public Set<LineItem> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<LineItem> lineItems) {
+    public void setLineItems(Set<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
 }
