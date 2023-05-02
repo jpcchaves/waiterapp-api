@@ -3,6 +3,7 @@ package com.jpcchaves.waiterapp.services.impl;
 import com.jpcchaves.waiterapp.entities.LineItem;
 import com.jpcchaves.waiterapp.entities.Order;
 import com.jpcchaves.waiterapp.entities.Product;
+import com.jpcchaves.waiterapp.exceptions.BadRequestException;
 import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDto;
 import com.jpcchaves.waiterapp.repositories.LineItemRepository;
@@ -11,7 +12,7 @@ import com.jpcchaves.waiterapp.repositories.ProductRepository;
 import com.jpcchaves.waiterapp.services.LineItemService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class LineItemServiceImpl implements LineItemService {
@@ -38,6 +39,10 @@ public class LineItemServiceImpl implements LineItemService {
                 .findById(lineItem.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found for the given id: " + lineItem.getProductId()));
 
+        if (hasDuplicateItem(order.getLineItems(), product)) {
+            throw new BadRequestException("The product has already been added: " + product.getName() + ". Instead of adding, try editing the product");
+        }
+
         LineItem newItem = new LineItem();
 
         newItem.setSubTotal(calculateSubTotal(lineItem.getQuantity(), product.getPrice()));
@@ -58,11 +63,20 @@ public class LineItemServiceImpl implements LineItemService {
         return quantity * price;
     }
 
-    private Double calculateOrderTotal(List<LineItem> lineItems) {
+    private Double calculateOrderTotal(Set<LineItem> lineItems) {
         Double total = 0.0;
         for (LineItem lineItem : lineItems) {
             total += lineItem.getSubTotal();
         }
         return total;
+    }
+
+    private Boolean hasDuplicateItem(Set<LineItem> lineItems, Product product) {
+        for (LineItem item : lineItems) {
+            if (item.getProduct().equals(product)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
