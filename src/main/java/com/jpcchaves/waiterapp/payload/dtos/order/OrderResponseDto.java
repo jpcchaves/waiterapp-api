@@ -4,7 +4,7 @@ import com.jpcchaves.waiterapp.Enum.OrderStatus;
 import com.jpcchaves.waiterapp.entities.LineItem;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class OrderResponseDto {
@@ -17,7 +17,7 @@ public class OrderResponseDto {
     private Double orderTotal;
     private Boolean isPaid;
     private Boolean isDone;
-    private List<LineItem> lineItems;
+    private Set<LineItem> lineItems;
 
     public OrderResponseDto() {
     }
@@ -31,7 +31,7 @@ public class OrderResponseDto {
                             Double orderTotal,
                             Boolean isPaid,
                             Boolean isDone,
-                            List<LineItem> lineItems) {
+                            Set<LineItem> lineItems) {
         this.orderId = orderId;
         this.orderCode = orderCode;
         this.orderDetails = orderDetails;
@@ -116,11 +116,11 @@ public class OrderResponseDto {
         isDone = done;
     }
 
-    public List<LineItem> getLineItems() {
+    public Set<LineItem> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<LineItem> lineItems) {
+    public void setLineItems(Set<LineItem> lineItems) {
         this.lineItems = lineItems;
     }
 }
