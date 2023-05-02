@@ -1,5 +1,6 @@
 package com.jpcchaves.waiterapp.exceptions.handler;
 
+import com.jpcchaves.waiterapp.exceptions.BadRequestException;
 import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
 import com.jpcchaves.waiterapp.exceptions.model.ExceptionResponse;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ExceptionResponse> handleBadRequestException(BadRequestException ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 }
