@@ -1,0 +1,2 @@
+alter table line_item add constraint FKlfuo9o3keu9a7mlxumaqoylgu foreign key (order_id) references orders (order_id);
+alter table line_item add constraint FK4t0wt21kx1ug0wrxmnfijdten foreign key (product_id) references products (id);
