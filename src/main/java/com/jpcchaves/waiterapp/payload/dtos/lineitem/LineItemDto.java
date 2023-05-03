@@ -1,17 +1,39 @@
 package com.jpcchaves.waiterapp.payload.dtos.lineitem;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.jpcchaves.waiterapp.entities.Order;
+import com.jpcchaves.waiterapp.entities.Product;
+
 public class LineItemDto {
+    private Long id;
     private Integer quantity;
-    private Long orderId;
-    private Long productId;
+    private Double subTotal;
+    @JsonBackReference
+    private Order order;
+    private Product product;
+
 
     public LineItemDto() {
     }
 
-    public LineItemDto(Integer quantity, Long orderId, Long productId) {
+    public LineItemDto(Long id,
+                       Integer quantity,
+                       Double subTotal,
+                       Order order,
+                       Product product) {
+        this.id = id;
         this.quantity = quantity;
-        this.orderId = orderId;
-        this.productId = productId;
+        this.subTotal = subTotal;
+        this.order = order;
+        this.product = product;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -22,19 +44,27 @@ public class LineItemDto {
         this.quantity = quantity;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Double getSubTotal() {
+        return subTotal;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setSubTotal(Double subTotal) {
+        this.subTotal = subTotal;
     }
 
-    public Long getProductId() {
-        return productId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }
