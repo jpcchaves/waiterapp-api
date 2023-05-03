@@ -13,9 +13,13 @@ import com.jpcchaves.waiterapp.repositories.OrderRepository;
 import com.jpcchaves.waiterapp.repositories.ProductRepository;
 import com.jpcchaves.waiterapp.services.OrderService;
 import com.jpcchaves.waiterapp.utils.mapper.MapperUtils;
+import com.jpcchaves.waiterapp.utils.ordercalcs.OrderCalcs;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -64,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
                     .findById(item.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found for the given id " + item.getProductId()));
 
-            Double subTotal = calculateSubTotal(item.getQuantity(), product.getPrice());
+            Double subTotal = OrderCalcs.calculateSubTotal(item.getQuantity(), product.getPrice());
 
             LineItem lineItem = new LineItem(item.getQuantity(), subTotal, newOrder, product);
             itemsToSave.add(lineItem);
@@ -72,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
             newOrder.getLineItems().add(lineItem);
         }
 
-        Double orderTotal = calculateOrderTotal(new HashSet<>(itemsToSave));
+        Double orderTotal = OrderCalcs.calculateOrderTotal(new HashSet<>(itemsToSave));
 
         newOrder.setOrderTotal(orderTotal);
 
@@ -87,17 +91,5 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No such order found for id " + id));
         OrderResponseDto orderResponseDto = mapper.parseObject(order, OrderResponseDto.class);
         return orderResponseDto;
-    }
-
-    private Double calculateSubTotal(Integer quantity, Double price) {
-        return quantity * price;
-    }
-
-    private Double calculateOrderTotal(Set<LineItem> lineItems) {
-        Double total = 0.0;
-        for (LineItem lineItem : lineItems) {
-            total += lineItem.getSubTotal();
-        }
-        return total;
     }
 }

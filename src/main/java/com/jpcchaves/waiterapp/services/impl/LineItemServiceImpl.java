@@ -11,6 +11,7 @@ import com.jpcchaves.waiterapp.repositories.LineItemRepository;
 import com.jpcchaves.waiterapp.repositories.OrderRepository;
 import com.jpcchaves.waiterapp.repositories.ProductRepository;
 import com.jpcchaves.waiterapp.services.LineItemService;
+import com.jpcchaves.waiterapp.utils.ordercalcs.OrderCalcs;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -46,31 +47,19 @@ public class LineItemServiceImpl implements LineItemService {
 
         LineItem newItem = new LineItem();
 
-        newItem.setSubTotal(calculateSubTotal(lineItem.getQuantity(), product.getPrice()));
+        newItem.setSubTotal(OrderCalcs.calculateSubTotal(lineItem.getQuantity(), product.getPrice()));
         newItem.setOrder(order);
         newItem.setProduct(product);
         newItem.setQuantity(lineItem.getQuantity());
 
         order.getLineItems().add(newItem);
 
-        Double total = calculateOrderTotal(order.getLineItems());
+        Double total = OrderCalcs.calculateOrderTotal(order.getLineItems());
         order.setOrderTotal(total);
 
         repository.save(newItem);
 
         return new LineItemAddedDto("Item successfully added to the order");
-    }
-
-    private Double calculateSubTotal(Integer quantity, Double price) {
-        return quantity * price;
-    }
-
-    private Double calculateOrderTotal(Set<LineItem> lineItems) {
-        Double total = 0.0;
-        for (LineItem lineItem : lineItems) {
-            total += lineItem.getSubTotal();
-        }
-        return total;
     }
 
     private Boolean hasDuplicateItem(Set<LineItem> lineItems, Product product) {
