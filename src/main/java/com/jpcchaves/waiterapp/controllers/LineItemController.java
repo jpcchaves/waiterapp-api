@@ -1,7 +1,7 @@
 package com.jpcchaves.waiterapp.controllers;
 
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemAddedDto;
-import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDto;
+import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDataDto;
 import com.jpcchaves.waiterapp.services.LineItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ public class LineItemController {
     }
 
     @PostMapping
-    public ResponseEntity<LineItemAddedDto> create(@RequestBody LineItemDto lineItemDto) {
+    public ResponseEntity<LineItemAddedDto> create(@RequestBody LineItemDataDto lineItemDto) {
         return ResponseEntity.status(HttpStatus.OK).body(service.createLineItem(lineItemDto));
     }
 }
