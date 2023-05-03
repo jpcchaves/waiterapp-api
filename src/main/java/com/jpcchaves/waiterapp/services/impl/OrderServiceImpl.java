@@ -73,6 +73,13 @@ public class OrderServiceImpl implements OrderService {
         return mapper.parseObject(savedOrder, OrderResponseDto.class);
     }
 
+    @Override
+    public OrderResponseDto getById(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No such order found for id " + id));
+        OrderResponseDto orderResponseDto = mapper.parseObject(order, OrderResponseDto.class);
+        return orderResponseDto;
+    }
+
     private Double calculateSubTotal(Integer quantity, Double price) {
         return quantity * price;
     }
