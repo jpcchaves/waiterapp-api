@@ -1,5 +1,6 @@
 package com.jpcchaves.waiterapp.services.impl;
 
+import com.jpcchaves.waiterapp.Enum.OrderStatus;
 import com.jpcchaves.waiterapp.entities.LineItem;
 import com.jpcchaves.waiterapp.entities.Order;
 import com.jpcchaves.waiterapp.entities.Product;
@@ -14,8 +15,7 @@ import com.jpcchaves.waiterapp.services.OrderService;
 import com.jpcchaves.waiterapp.utils.mapper.MapperUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -49,6 +49,10 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
         OrderResponseDto orderResponseDto = new OrderResponseDto();
         orderResponseDto.setOrderDetails(orderRequestDto.getOrderDetails());
+        orderResponseDto.setOrderCode(new UUID(1, 20));
+        orderResponseDto.setStatus(OrderStatus.WAITING);
+        orderResponseDto.setDone(false);
+        orderResponseDto.setPaid(false);
 
         Order newOrder = orderRepository.save(mapper.parseObject(orderResponseDto, Order.class));
 
@@ -64,8 +68,13 @@ public class OrderServiceImpl implements OrderService {
 
             LineItem lineItem = new LineItem(item.getQuantity(), subTotal, newOrder, product);
             itemsToSave.add(lineItem);
+
             newOrder.getLineItems().add(lineItem);
         }
+
+        Double orderTotal = calculateOrderTotal(new HashSet<>(itemsToSave));
+
+        newOrder.setOrderTotal(orderTotal);
 
         lineItemRepository.saveAll(itemsToSave);
         Order savedOrder = orderRepository.save(newOrder);
@@ -82,5 +91,13 @@ public class OrderServiceImpl implements OrderService {
 
     private Double calculateSubTotal(Integer quantity, Double price) {
         return quantity * price;
+    }
+
+    private Double calculateOrderTotal(Set<LineItem> lineItems) {
+        Double total = 0.0;
+        for (LineItem lineItem : lineItems) {
+            total += lineItem.getSubTotal();
+        }
+        return total;
     }
 }
