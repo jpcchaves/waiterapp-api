@@ -6,7 +6,7 @@ import com.jpcchaves.waiterapp.entities.Product;
 import com.jpcchaves.waiterapp.exceptions.BadRequestException;
 import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemAddedDto;
-import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDto;
+import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDataDto;
 import com.jpcchaves.waiterapp.repositories.LineItemRepository;
 import com.jpcchaves.waiterapp.repositories.OrderRepository;
 import com.jpcchaves.waiterapp.repositories.ProductRepository;
@@ -31,7 +31,7 @@ public class LineItemServiceImpl implements LineItemService {
     }
 
     @Override
-    public LineItemAddedDto createLineItem(LineItemDto lineItem) {
+    public LineItemAddedDto createLineItem(LineItemDataDto lineItem) {
         Order order = orderRepository
                 .findById(lineItem.getOrderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found for the given id: " + lineItem.getOrderId()));
