@@ -1,18 +1,18 @@
 package com.jpcchaves.waiterapp.payload.dtos.order;
 
-import com.jpcchaves.waiterapp.entities.LineItem;
+import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDataDto;
 
 import java.util.List;
 
 public class OrderRequestDto {
     private String orderDetails;
-    private List<LineItem> lineItems;
+    private List<LineItemDataDto> lineItems;
 
     public OrderRequestDto() {
     }
 
     public OrderRequestDto(String orderDetails,
-                           List<LineItem> lineItems) {
+                           List<LineItemDataDto> lineItems) {
         this.orderDetails = orderDetails;
         this.lineItems = lineItems;
     }
@@ -25,11 +25,11 @@ public class OrderRequestDto {
         this.orderDetails = orderDetails;
     }
 
-    public List<LineItem> getLineItems() {
+    public List<LineItemDataDto> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(List<LineItem> lineItems) {
+    public void setLineItems(List<LineItemDataDto> lineItems) {
         this.lineItems = lineItems;
     }
 }

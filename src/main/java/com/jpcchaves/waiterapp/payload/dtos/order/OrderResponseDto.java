@@ -1,9 +1,10 @@
 package com.jpcchaves.waiterapp.payload.dtos.order;
 
 import com.jpcchaves.waiterapp.Enum.OrderStatus;
-import com.jpcchaves.waiterapp.entities.LineItem;
+import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDto;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class OrderResponseDto {
     private Double orderTotal;
     private Boolean isPaid;
     private Boolean isDone;
-    private Set<LineItem> lineItems;
+    private Set<LineItemDto> lineItems = new HashSet<>();
 
     public OrderResponseDto() {
     }
@@ -31,7 +32,7 @@ public class OrderResponseDto {
                             Double orderTotal,
                             Boolean isPaid,
                             Boolean isDone,
-                            Set<LineItem> lineItems) {
+                            Set<LineItemDto> lineItems) {
         this.orderId = orderId;
         this.orderCode = orderCode;
         this.orderDetails = orderDetails;
@@ -116,11 +117,11 @@ public class OrderResponseDto {
         isDone = done;
     }
 
-    public Set<LineItem> getLineItems() {
+    public Set<LineItemDto> getLineItems() {
         return lineItems;
     }
 
-    public void setLineItems(Set<LineItem> lineItems) {
+    public void setLineItems(Set<LineItemDto> lineItems) {
         this.lineItems = lineItems;
     }
 }
