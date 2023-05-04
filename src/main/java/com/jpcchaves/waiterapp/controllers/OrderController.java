@@ -33,4 +33,10 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

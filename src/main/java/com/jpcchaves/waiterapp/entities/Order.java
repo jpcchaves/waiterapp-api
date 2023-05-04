@@ -43,7 +43,7 @@ public class Order implements Serializable {
 
     @OneToMany(
             mappedBy = "order",
-            cascade = CascadeType.DETACH
+            cascade = CascadeType.REMOVE
     )
     @JsonManagedReference
     private Set<LineItem> lineItems = new HashSet<>();

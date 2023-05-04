@@ -92,4 +92,13 @@ public class OrderServiceImpl implements OrderService {
         OrderResponseDto orderResponseDto = mapper.parseObject(order, OrderResponseDto.class);
         return orderResponseDto;
     }
+
+    @Override
+    public void delete(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new ResourceNotFoundException("No such order found for id " + id);
+        }
+
+        orderRepository.deleteById(id);
+    }
 }
