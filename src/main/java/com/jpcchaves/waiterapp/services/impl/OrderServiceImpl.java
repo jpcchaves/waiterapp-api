@@ -4,6 +4,7 @@ import com.jpcchaves.waiterapp.Enum.OrderStatus;
 import com.jpcchaves.waiterapp.entities.LineItem;
 import com.jpcchaves.waiterapp.entities.Order;
 import com.jpcchaves.waiterapp.entities.Product;
+import com.jpcchaves.waiterapp.exceptions.BadRequestException;
 import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDataDto;
 import com.jpcchaves.waiterapp.payload.dtos.order.OrderRequestDto;
@@ -16,10 +17,7 @@ import com.jpcchaves.waiterapp.utils.mapper.MapperUtils;
 import com.jpcchaves.waiterapp.utils.ordercalcs.OrderCalcs;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -51,6 +49,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
+
+        if (verifyDuplicateItems(orderRequestDto.getLineItems())) {
+            throw new BadRequestException("There are duplicate items in the order");
+        }
+
         OrderResponseDto orderResponseDto = new OrderResponseDto();
         orderResponseDto.setOrderDetails(orderRequestDto.getOrderDetails());
         orderResponseDto.setOrderCode(new UUID(1, 20));
@@ -61,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
         Order newOrder = orderRepository.save(mapper.parseObject(orderResponseDto, Order.class));
 
         List<LineItemDataDto> items = orderRequestDto.getLineItems();
+
         List<LineItem> itemsToSave = new ArrayList<>();
 
         for (LineItemDataDto item : items) {
@@ -68,9 +72,11 @@ public class OrderServiceImpl implements OrderService {
                     .findById(item.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found for the given id " + item.getProductId()));
 
+
             Double subTotal = OrderCalcs.calculateSubTotal(item.getQuantity(), product.getPrice());
 
             LineItem lineItem = new LineItem(item.getQuantity(), subTotal, newOrder, product);
+
             itemsToSave.add(lineItem);
 
             newOrder.getLineItems().add(lineItem);
@@ -100,5 +106,17 @@ public class OrderServiceImpl implements OrderService {
         }
 
         orderRepository.deleteById(id);
+    }
+
+    private Boolean verifyDuplicateItems(List<LineItemDataDto> items) {
+        final Set<Long> setToReturn = new HashSet<>();
+
+        for (LineItemDataDto item : items) {
+            if (!setToReturn.add(item.getProductId())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
