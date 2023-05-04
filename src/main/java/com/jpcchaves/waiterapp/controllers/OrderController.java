@@ -1,7 +1,9 @@
 package com.jpcchaves.waiterapp.controllers;
 
+import com.jpcchaves.waiterapp.payload.dtos.ApiMessageResponseDto;
 import com.jpcchaves.waiterapp.payload.dtos.order.OrderRequestDto;
 import com.jpcchaves.waiterapp.payload.dtos.order.OrderResponseDto;
+import com.jpcchaves.waiterapp.payload.dtos.order.OrderStatusDto;
 import com.jpcchaves.waiterapp.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +40,10 @@ public class OrderController {
     public ResponseEntity<?> deleteById(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiMessageResponseDto> updateStatus(@PathVariable("id") Long id, @RequestBody OrderStatusDto status) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateOrderStatus(id, status));
     }
 }

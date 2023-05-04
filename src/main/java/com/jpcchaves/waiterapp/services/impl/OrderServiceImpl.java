@@ -6,9 +6,11 @@ import com.jpcchaves.waiterapp.entities.Order;
 import com.jpcchaves.waiterapp.entities.Product;
 import com.jpcchaves.waiterapp.exceptions.BadRequestException;
 import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
+import com.jpcchaves.waiterapp.payload.dtos.ApiMessageResponseDto;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDataDto;
 import com.jpcchaves.waiterapp.payload.dtos.order.OrderRequestDto;
 import com.jpcchaves.waiterapp.payload.dtos.order.OrderResponseDto;
+import com.jpcchaves.waiterapp.payload.dtos.order.OrderStatusDto;
 import com.jpcchaves.waiterapp.repositories.LineItemRepository;
 import com.jpcchaves.waiterapp.repositories.OrderRepository;
 import com.jpcchaves.waiterapp.repositories.ProductRepository;
@@ -97,6 +99,14 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No such order found for id " + id));
         OrderResponseDto orderResponseDto = mapper.parseObject(order, OrderResponseDto.class);
         return orderResponseDto;
+    }
+
+    @Override
+    public ApiMessageResponseDto updateOrderStatus(Long id, OrderStatusDto status) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No such order found for id " + id));
+        order.setStatus(OrderStatus.valueOf(status.getStatus()));
+        orderRepository.save(order);
+        return new ApiMessageResponseDto("Order updated successfully! Status: " + order.getStatus());
     }
 
     @Override
