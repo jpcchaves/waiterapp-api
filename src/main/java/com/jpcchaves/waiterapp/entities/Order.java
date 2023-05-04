@@ -30,7 +30,8 @@ public class Order implements Serializable {
 
     private String orderDetails;
 
-    private OrderStatus status;
+    private Integer status;
+
     @CreatedDate
     private Date createdAt;
     private Date conclusionDate;
@@ -64,7 +65,7 @@ public class Order implements Serializable {
         this.orderId = orderId;
         this.orderCode = orderCode;
         this.orderDetails = orderDetails;
-        this.status = status;
+        setStatus(status);
         this.createdAt = createdAt;
         this.conclusionDate = conclusionDate;
         this.orderTotal = orderTotal;
@@ -98,11 +99,13 @@ public class Order implements Serializable {
     }
 
     public OrderStatus getStatus() {
-        return status;
+        return OrderStatus.valueOf(status);
     }
 
     public void setStatus(OrderStatus status) {
-        this.status = status;
+        if (status != null) {
+            this.status = status.getCode();
+        }
     }
 
     public Date getCreatedAt() {
