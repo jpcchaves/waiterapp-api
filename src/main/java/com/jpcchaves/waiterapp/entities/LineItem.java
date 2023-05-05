@@ -18,7 +18,8 @@ public class LineItem implements Serializable {
     private Double subTotal;
 
     @ManyToOne(
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.DETACH
     )
     @JoinColumn(
             name = "order_id",
@@ -28,7 +29,8 @@ public class LineItem implements Serializable {
     private Order order;
 
     @ManyToOne(
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.DETACH
     )
     @JoinColumn(
             name = "product_id",
