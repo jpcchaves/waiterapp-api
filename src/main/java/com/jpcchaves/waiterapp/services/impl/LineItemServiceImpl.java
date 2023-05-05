@@ -47,7 +47,9 @@ public class LineItemServiceImpl implements LineItemService {
 
         LineItem newItem = new LineItem();
 
-        newItem.setSubTotal(OrderCalcs.calculateSubTotal(lineItem.getQuantity(), product.getPrice()));
+
+        newItem.setSelledPrice(product.getPrice());
+        newItem.setSubTotal(OrderCalcs.calculateSubTotal(lineItem.getQuantity(), newItem.getSelledPrice()));
         newItem.setOrder(order);
         newItem.setProduct(product);
         newItem.setQuantity(lineItem.getQuantity());

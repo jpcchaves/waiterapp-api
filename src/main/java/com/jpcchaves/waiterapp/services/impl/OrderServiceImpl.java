@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
 
             Double subTotal = OrderCalcs.calculateSubTotal(item.getQuantity(), product.getPrice());
 
-            LineItem lineItem = new LineItem(item.getQuantity(), subTotal, newOrder, product);
+            LineItem lineItem = new LineItem(item.getQuantity(), product.getPrice(), subTotal, newOrder, product);
 
             itemsToSave.add(lineItem);
 

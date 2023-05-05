@@ -14,6 +14,7 @@ public class LineItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Double selledPrice;
     private Integer quantity;
     private Double subTotal;
 
@@ -43,10 +44,12 @@ public class LineItem implements Serializable {
 
     public LineItem(Integer quantity,
                     Double subTotal,
+                    Double selledPrice,
                     Order order,
                     Product product) {
         this.quantity = quantity;
         this.subTotal = subTotal;
+        this.selledPrice = selledPrice;
         this.order = order;
         this.product = product;
     }
@@ -97,5 +100,13 @@ public class LineItem implements Serializable {
 
     public void setSubTotal(Double subTotal) {
         this.subTotal = subTotal;
+    }
+
+    public Double getSelledPrice() {
+        return selledPrice;
+    }
+
+    public void setSelledPrice(Double selledPrice) {
+        this.selledPrice = selledPrice;
     }
 }

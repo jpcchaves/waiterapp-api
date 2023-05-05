@@ -8,6 +8,7 @@ public class LineItemDto {
     private Long id;
     private Integer quantity;
     private Double subTotal;
+    private Double selledPrice;
     @JsonBackReference
     private Order order;
     private Product product;
@@ -19,6 +20,7 @@ public class LineItemDto {
     public LineItemDto(Long id,
                        Integer quantity,
                        Double subTotal,
+                       Double selledPrice,
                        Order order,
                        Product product) {
         this.id = id;
@@ -66,5 +68,13 @@ public class LineItemDto {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Double getSelledPrice() {
+        return selledPrice;
+    }
+
+    public void setSelledPrice(Double selledPrice) {
+        this.selledPrice = selledPrice;
     }
 }
