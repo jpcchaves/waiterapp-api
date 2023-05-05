@@ -52,6 +52,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
 
+        for (LineItemDataDto item : orderRequestDto.getLineItems()) {
+            if (!productRepository.existsById(item.getProductId())) {
+                throw new BadRequestException("Product not found for the given id: " + item.getProductId());
+            }
+        }
+
         if (verifyDuplicateItems(orderRequestDto.getLineItems())) {
             throw new BadRequestException("There are duplicate items in the order");
         }
