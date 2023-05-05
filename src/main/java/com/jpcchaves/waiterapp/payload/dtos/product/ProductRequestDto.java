@@ -1,8 +1,16 @@
 package com.jpcchaves.waiterapp.payload.dtos.product;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 public class ProductRequestDto {
+    @NotBlank(message = "Product is a required field")
     private String name;
+    @NotBlank(message = "Description is a required field")
     private String description;
+    @Positive(message = "Price should be positive")
+    @DecimalMin(message = "Price should be higher than 0.0", value = "0.1")
     private Double price;
 
     public ProductRequestDto() {

@@ -3,6 +3,7 @@ package com.jpcchaves.waiterapp.controllers;
 import com.jpcchaves.waiterapp.payload.dtos.product.ProductDto;
 import com.jpcchaves.waiterapp.payload.dtos.product.ProductRequestDto;
 import com.jpcchaves.waiterapp.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> create(@RequestBody ProductRequestDto productRequestDto) {
+    public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductRequestDto productRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(productRequestDto));
     }
 
@@ -35,7 +36,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> update(@PathVariable("id") Long id, @RequestBody ProductRequestDto productRequestDto) {
+    public ResponseEntity<ProductDto> update(@PathVariable("id") Long id, @Valid @RequestBody ProductRequestDto productRequestDto) {
         return ResponseEntity.ok(service.update(id, productRequestDto));
     }
 
