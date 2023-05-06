@@ -4,6 +4,7 @@ import com.jpcchaves.waiterapp.Enum.ProductStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "products")
@@ -21,6 +22,7 @@ public class Product implements Serializable {
     @Column(nullable = false)
     private Double price;
     private Integer status;
+    private Date inactivationDate;
 
     public Product() {
     }
@@ -29,12 +31,14 @@ public class Product implements Serializable {
                    String name,
                    String description,
                    Double price,
-                   Integer status) {
+                   Integer status,
+                   Date inactivationDate) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.status = status;
+        this.inactivationDate = inactivationDate;
     }
 
     public Long getId() {
@@ -77,5 +81,13 @@ public class Product implements Serializable {
         if (status != null) {
             this.status = status.getCode();
         }
+    }
+
+    public Date getInactivationDate() {
+        return inactivationDate;
+    }
+
+    public void setInactivationDate(Date inactivationDate) {
+        this.inactivationDate = inactivationDate;
     }
 }

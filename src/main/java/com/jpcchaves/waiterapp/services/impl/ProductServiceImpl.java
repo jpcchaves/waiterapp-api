@@ -12,6 +12,7 @@ import com.jpcchaves.waiterapp.services.ProductService;
 import com.jpcchaves.waiterapp.utils.mapper.MapperUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -79,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found for id " + id));
 
         product.setStatus(ProductStatus.INACTIVE);
+        product.setInactivationDate(new Date());
 
         repository.save(product);
     }

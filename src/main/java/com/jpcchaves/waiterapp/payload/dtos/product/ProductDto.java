@@ -2,12 +2,15 @@ package com.jpcchaves.waiterapp.payload.dtos.product;
 
 import com.jpcchaves.waiterapp.Enum.ProductStatus;
 
+import java.util.Date;
+
 public class ProductDto {
     private Long id;
     private String name;
     private String description;
     private Double price;
     private ProductStatus status;
+    private Date inactivationDate;
 
     public ProductDto() {
     }
@@ -16,12 +19,14 @@ public class ProductDto {
                       String name,
                       String description,
                       Double price,
-                      ProductStatus status) {
+                      ProductStatus status,
+                      Date inactivationDate) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.status = status;
+        this.inactivationDate = inactivationDate;
     }
 
     public Long getId() {
@@ -62,5 +67,13 @@ public class ProductDto {
 
     public void setStatus(ProductStatus status) {
         this.status = status;
+    }
+
+    public Date getInactivationDate() {
+        return inactivationDate;
+    }
+
+    public void setInactivationDate(Date inactivationDate) {
+        this.inactivationDate = inactivationDate;
     }
 }
