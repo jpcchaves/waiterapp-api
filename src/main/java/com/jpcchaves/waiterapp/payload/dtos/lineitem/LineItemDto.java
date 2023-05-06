@@ -1,8 +1,8 @@
 package com.jpcchaves.waiterapp.payload.dtos.lineitem;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.jpcchaves.waiterapp.entities.Order;
-import com.jpcchaves.waiterapp.entities.Product;
+import com.jpcchaves.waiterapp.payload.dtos.order.OrderResponseDto;
+import com.jpcchaves.waiterapp.payload.dtos.product.ProductDto;
 
 public class LineItemDto {
     private Long id;
@@ -10,8 +10,8 @@ public class LineItemDto {
     private Double subTotal;
     private Double selledPrice;
     @JsonBackReference
-    private Order order;
-    private Product product;
+    private OrderResponseDto order;
+    private ProductDto product;
 
 
     public LineItemDto() {
@@ -21,8 +21,8 @@ public class LineItemDto {
                        Integer quantity,
                        Double subTotal,
                        Double selledPrice,
-                       Order order,
-                       Product product) {
+                       OrderResponseDto order,
+                       ProductDto product) {
         this.id = id;
         this.quantity = quantity;
         this.subTotal = subTotal;
@@ -54,19 +54,19 @@ public class LineItemDto {
         this.subTotal = subTotal;
     }
 
-    public Order getOrder() {
+    public OrderResponseDto getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    public void setOrder(OrderResponseDto order) {
         this.order = order;
     }
 
-    public Product getProduct() {
+    public ProductDto getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(ProductDto product) {
         this.product = product;
     }
 
