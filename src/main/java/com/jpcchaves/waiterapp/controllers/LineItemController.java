@@ -1,5 +1,6 @@
 package com.jpcchaves.waiterapp.controllers;
 
+import com.jpcchaves.waiterapp.payload.dtos.ApiMessageResponseDto;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemAddedDto;
 import com.jpcchaves.waiterapp.payload.dtos.lineitem.LineItemDataDto;
 import com.jpcchaves.waiterapp.services.LineItemService;
@@ -19,8 +20,13 @@ public class LineItemController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<LineItemAddedDto> create(@RequestBody LineItemDataDto lineItemDto) {
         return ResponseEntity.status(HttpStatus.OK).body(service.createLineItem(lineItemDto));
+    }
+
+    @PostMapping("/remove")
+    public ResponseEntity<ApiMessageResponseDto> remove(@RequestBody LineItemDataDto lineItemDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.removeLineItem(lineItemDto));
     }
 }
