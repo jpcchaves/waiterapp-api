@@ -1,10 +1,9 @@
 package com.jpcchaves.waiterapp.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jpcchaves.waiterapp.Enum.ProductStatus;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -21,6 +20,7 @@ public class Product implements Serializable {
     private String description;
     @Column(nullable = false)
     private Double price;
+    private Integer status;
 
     public Product() {
     }
@@ -28,11 +28,13 @@ public class Product implements Serializable {
     public Product(Long id,
                    String name,
                    String description,
-                   Double price) {
+                   Double price,
+                   Integer status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.status = status;
     }
 
     public Long getId() {
@@ -65,5 +67,15 @@ public class Product implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public ProductStatus getStatus() {
+        return ProductStatus.valueOf(status);
+    }
+
+    public void setStatus(ProductStatus status) {
+        if (status != null) {
+            this.status = status.getCode();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.jpcchaves.waiterapp.services.impl;
 
 import com.jpcchaves.waiterapp.Enum.OrderStatus;
+import com.jpcchaves.waiterapp.Enum.ProductStatus;
 import com.jpcchaves.waiterapp.entities.LineItem;
 import com.jpcchaves.waiterapp.entities.Order;
 import com.jpcchaves.waiterapp.entities.Product;
@@ -77,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (LineItemDataDto item : items) {
             Product product = productRepository
-                    .findById(item.getProductId())
+                    .findByStatusAndId(ProductStatus.ACTIVE.getCode(), item.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found for the given id " + item.getProductId()));
 
 

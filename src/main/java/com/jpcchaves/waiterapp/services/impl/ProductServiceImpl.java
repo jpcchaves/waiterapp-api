@@ -1,7 +1,6 @@
 package com.jpcchaves.waiterapp.services.impl;
 
-import com.jpcchaves.waiterapp.entities.LineItem;
-import com.jpcchaves.waiterapp.entities.Order;
+import com.jpcchaves.waiterapp.Enum.ProductStatus;
 import com.jpcchaves.waiterapp.entities.Product;
 import com.jpcchaves.waiterapp.exceptions.ResourceNotFoundException;
 import com.jpcchaves.waiterapp.payload.dtos.product.ProductDto;
@@ -11,12 +10,9 @@ import com.jpcchaves.waiterapp.repositories.OrderRepository;
 import com.jpcchaves.waiterapp.repositories.ProductRepository;
 import com.jpcchaves.waiterapp.services.ProductService;
 import com.jpcchaves.waiterapp.utils.mapper.MapperUtils;
-import com.jpcchaves.waiterapp.utils.ordercalcs.OrderCalcs;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -36,13 +32,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductRequestDto productRequestDto) {
         Product product = mapper.parseObject(productRequestDto, Product.class);
+
+        product.setStatus(ProductStatus.ACTIVE);
+
         Product savedProduct = repository.save(product);
         return mapper.parseObject(savedProduct, ProductDto.class);
     }
 
     @Override
     public List<ProductDto> getAll() {
-        List<Product> products = repository.findAll();
+        List<Product> products = repository.findAllByStatus(ProductStatus.ACTIVE.getCode());
         List<ProductDto> productDtos = mapper.parseListObjects(products, ProductDto.class);
         return productDtos;
     }
@@ -75,19 +74,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void delete(Long id) {
-        if (!repository.existsById(id)) {
-            throw new ResourceNotFoundException("Product not found for id " + id);
-        }
+        Product product = repository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found for id " + id));
 
-        List<LineItem> items = lineItemRepository.getLineItemsByProduct_Id(id);
-        Set<Order> orders = orderRepository.findAllByLineItemsIn(new HashSet<>(items));
+        product.setStatus(ProductStatus.INACTIVE);
 
-        lineItemRepository.deleteAll(items);
-
-        for (Order order : orders) {
-            order.setOrderTotal(OrderCalcs.calculateOrderTotal(order.getLineItems()));
-        }
-
-        repository.deleteById(id);
+        repository.save(product);
     }
 }
