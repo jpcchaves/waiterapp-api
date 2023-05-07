@@ -15,6 +15,7 @@ import com.jpcchaves.waiterapp.services.LineItemService;
 import com.jpcchaves.waiterapp.utils.ordercalcs.OrderCalcs;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -74,6 +75,12 @@ public class LineItemServiceImpl implements LineItemService {
                 .findById(lineItem.getOrderId())
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found for the given id: " + lineItem.getOrderId()));
 
+        if (order.getLineItems().size() == 0) {
+            throw new BadRequestException("Order does not have any items");
+        }
+
+        List<LineItem> orderItems = lineItemRepository.findAllByOrder(order);
+
         Product product = productRepository
                 .findById(lineItem.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found for the given id: " + lineItem.getProductId()));
@@ -82,13 +89,15 @@ public class LineItemServiceImpl implements LineItemService {
             throw new BadRequestException("The product doesn't exist in the order: " + product.getName());
         }
 
-
+        LineItem itemToRemove = new LineItem();
         for (LineItem item : order.getLineItems()) {
             if (item.getProduct().equals(product)) {
-                order.getLineItems().remove(item);
-                lineItemRepository.deleteById(item.getId());
+                itemToRemove = item;
             }
         }
+
+        lineItemRepository.deleteById(itemToRemove.getId());
+        order.getLineItems().remove(itemToRemove);
 
         Double total = OrderCalcs.calculateOrderTotal(order.getLineItems());
         order.setOrderTotal(total);
